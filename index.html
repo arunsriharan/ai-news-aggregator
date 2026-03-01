@@ -3,87 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI News Pulse | Truth & Liability</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>AI Pulse | Global News Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     
     <style>
         :root[data-theme="light"] {
-            --bg: #f8f9fa; --card: #ffffff; --text: #1a1a1b; --accent: #007bff; --border: #dbdbdb;
+            --bg: #f4f6f8; --card: #ffffff; --text: #121212; --accent: #0066ff; --border: #e0e0e0; --nav: #ffffff;
         }
         :root[data-theme="dark"] {
-            --bg: #030303; --card: #1a1a1b; --text: #d7dadc; --accent: #4dabff; --border: #343536;
+            --bg: #0b0e11; --card: #15191c; --text: #e1e3e6; --accent: #3399ff; --border: #2d3339; --nav: #15191c;
         }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; }
         
-        /* Navbar */
-        nav { background: var(--card); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 800; font-size: 1.5rem; color: var(--accent); cursor: pointer; }
-        .search-bar { flex-grow: 1; max-width: 500px; margin: 0 20px; position: relative; }
-        .search-bar input { width: 100%; padding: 10px 40px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        /* Top Navigation */
+        nav { background: var(--nav); padding: 10px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-weight: 900; font-size: 1.6rem; color: var(--accent); letter-spacing: -1px; cursor: pointer; }
         
-        /* Layout */
-        .main-content { display: grid; grid-template-columns: 1fr 300px; gap: 30px; padding: 20px 5%; }
-        
-        /* Article Card */
-        .card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .tag { background: var(--accent); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; }
-        .title { font-size: 1.8rem; margin: 15px 0; line-height: 1.2; }
-        .summary { line-height: 1.6; color: var(--text); opacity: 0.9; }
-        
-        /* Voting & Liability UI */
-        .meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-        .vote-btns { display: flex; gap: 10px; }
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-        .btn-agree { background: #e7f5ed; color: #28a745; }
-        .btn-disagree { background: #fdeaea; color: #dc3545; }
-        .liability-gauge { text-align: right; }
-        .gauge-text { font-size: 0.8rem; font-weight: bold; }
-        .gauge-bar { width: 100px; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; margin-top: 5px; }
-        .gauge-fill { height: 100%; background: var(--accent); }
+        /* Category Bar */
+        .category-bar { background: var(--card); overflow-x: auto; white-space: nowrap; padding: 10px 5%; border-bottom: 1px solid var(--border); display: flex; gap: 20px; scrollbar-width: none; }
+        .cat-item { cursor: pointer; font-weight: 600; opacity: 0.7; transition: 0.2s; font-size: 0.9rem; }
+        .cat-item:hover, .cat-item.active { opacity: 1; color: var(--accent); }
 
-        /* Sidebar - Trending Topics */
-        .sidebar-section { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); position: sticky; top: 100px; }
-        .trend-item { padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .trend-item:hover { color: var(--accent); }
+        /* Main Grid Layout */
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        
+        /* Featured Hero News */
+        .hero-news { grid-column: 1 / -1; background: var(--accent); color: white; border-radius: 16px; padding: 40px; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .hero-tag { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        
+        /* News Cards */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; transition: transform 0.2s; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .card-body { padding: 20px; flex-grow: 1; }
+        .card-tag { color: var(--accent); font-weight: bold; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .card-title { font-size: 1.25rem; margin: 0 0 10px 0; line-height: 1.3; }
+        .card-summary { font-size: 0.95rem; opacity: 0.8; line-height: 1.5; margin-bottom: 20px; }
 
-        @media (max-width: 900px) { .main-content { grid-template-columns: 1fr; } .sidebar { display: none; } }
+        /* Engagement Bars */
+        .card-footer { padding: 15px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .votes { display: flex; gap: 12px; }
+        .v-count { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        
+        /* Liability Indicator */
+        .liability-box { text-align: right; }
+        .l-label { font-size: 0.7rem; font-weight: bold; opacity: 0.6; }
+        .l-bar { width: 80px; height: 6px; background: #eee; border-radius: 10px; margin-top: 4px; overflow: hidden; }
+        .l-fill { height: 100%; background: var(--accent); }
+
+        /* Sidebar Ad & Trending */
+        .sidebar-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 25px; position: sticky; top: 80px; }
+        .ad-placeholder { background: #eee; height: 250px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-weight: bold; margin-bottom: 15px; }
+
+        @media (max-width: 850px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo" onclick="location.reload()">AI PULSE</div>
-        <div class="search-bar">
-            <span class="material-icons-outlined" style="position:absolute; left:12px; top:10px;">search</span>
-            <input type="text" id="searchInput" placeholder="Search news, tags, or topics...">
-        </div>
-        <div style="display: flex; gap: 15px;">
-            <button onclick="toggleTheme()" class="btn" id="themeBtn"><span class="material-icons-outlined">dark_mode</span></button>
-            <button class="btn btn-agree" onclick="notifyMe()">Notify Me</button>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span class="material-icons-outlined" style="cursor:pointer">search</span>
+            <span class="material-icons-outlined" onclick="toggleTheme()" style="cursor:pointer">dark_mode</span>
+            <button style="background:var(--accent); color:white; border:none; padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer">Login</button>
         </div>
     </nav>
 
-    <div class="main-content">
-        <div id="news-feed">
-            <p style="text-align: center;">Scanning global sources...</p>
-        </div>
+    <div class="category-bar">
+        <div class="cat-item active" onclick="filterCategory('All')">Latest</div>
+        <div class="cat-item" onclick="filterCategory('World')">World</div>
+        <div class="cat-item" onclick="filterCategory('Politics')">Politics</div>
+        <div class="cat-item" onclick="filterCategory('Tech')">Technology</div>
+        <div class="cat-item" onclick="filterCategory('Sports')">Sports</div>
+        <div class="cat-item" onclick="filterCategory('Research')">Research</div>
+    </div>
+
+    <div class="container">
+        <main>
+            <div class="hero-news" id="featured-news">
+                <span class="hero-tag">Breaking AI Analysis</span>
+                <h1 style="font-size: 2.5rem; margin: 15px 0;">Scanning Global Truth...</h1>
+                <p style="font-size: 1.1rem; opacity: 0.9;">Connecting to 100+ sources including BBC, France 24, and News 1st.</p>
+            </div>
+
+            <div class="news-grid" id="news-feed">
+                </div>
+        </main>
 
         <aside class="sidebar">
             <div class="sidebar-section">
-                <h3>Hot Topics</h3>
-                <div class="trend-item">#CompetitiveProgramming</div>
-                <div class="trend-item">#ICPC2026</div>
-                <div class="trend-item">#RealAnalysis</div>
-                <div class="trend-item">#AI_Ethics</div>
+                <div class="ad-placeholder">ADVERTISEMENT SPACE</div>
+                <p style="font-size: 0.8rem; text-align: center; opacity: 0.5;">Sponsored Content</p>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 style="margin-top:0">Trending Analysis</h3>
+                <div id="trending-list">
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Loading hot topics...</p>
+                </div>
             </div>
         </aside>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAf24QJBLGnLFOaYAOzWiaUZ2NwN9QX_kY",
@@ -97,54 +123,45 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // REAL-TIME LISTENER: Updates without refreshing the page!
-        function listenToNews(tagFilter = null) {
-            let newsQuery = collection(db, "articles");
-            if(tagFilter) newsQuery = query(newsQuery, where("tag", "==", tagFilter));
-
-            onSnapshot(newsQuery, (snapshot) => {
+        // Fetch Articles in Real-Time
+        function fetchNews() {
+            const q = query(collection(db, "articles"), orderBy("liability_score", "desc"), limit(12));
+            
+            onSnapshot(q, (snapshot) => {
                 const feed = document.getElementById('news-feed');
                 feed.innerHTML = '';
                 snapshot.forEach(doc => {
-                    const data = doc.data();
+                    const article = doc.data();
                     feed.innerHTML += `
-                        <div class="card">
-                            <span class="tag" onclick="filterByTag('${data.tag}')">${data.tag || 'News'}</span>
-                            <h2 class="title">${data.title}</h2>
-                            <p class="summary">${data.summary}</p>
-                            <div class="meta-row">
-                                <div class="vote-btns">
-                                    <button class="btn btn-agree"><span class="material-icons-outlined">thumb_up</span> ${data.agree_votes || 0}</button>
-                                    <button class="btn btn-disagree"><span class="material-icons-outlined">thumb_down</span> ${data.disagree_votes || 0}</button>
+                        <article class="card">
+                            <div class="card-body">
+                                <span class="card-tag">${article.tag || 'Global'}</span>
+                                <h3 class="card-title">${article.title}</h3>
+                                <p class="card-summary">${article.summary.substring(0, 120)}...</p>
+                                <a href="${article.link}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none; font-size:0.85rem">Read Full Source →</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="votes">
+                                    <div class="v-count"><span class="material-icons-outlined" style="font-size:18px">thumb_up</span> ${article.agree_votes || 0}</div>
+                                    <div class="v-count"><span class="material-icons-outlined" style="font-size:18px">thumb_down</span> ${article.disagree_votes || 0}</div>
                                 </div>
-                                <div class="liability-gauge">
-                                    <div class="gauge-text">Liability Score: ${data.liability_score}%</div>
-                                    <div class="gauge-bar"><div class="gauge-fill" style="width:${data.liability_score}%"></div></div>
+                                <div class="liability-box">
+                                    <div class="l-label">LIABILITY ${article.liability_score}%</div>
+                                    <div class="l-bar"><div class="l-fill" style="width:${article.liability_score}%"></div></div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     `;
                 });
             });
         }
 
-        // Global functions for buttons
         window.toggleTheme = () => {
             const root = document.documentElement;
-            const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            root.setAttribute('data-theme', newTheme);
-            document.getElementById('themeBtn').innerHTML = `<span class="material-icons-outlined">${newTheme === 'light' ? 'dark_mode' : 'light_mode'}</span>`;
+            root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         };
 
-        window.notifyMe = () => {
-            alert("Notification system linked! You will be alerted for breaking news.");
-        };
-
-        window.filterByTag = (tag) => {
-            listenToNews(tag);
-        };
-
-        listenToNews();
+        fetchNews();
     </script>
 </body>
 </html>
