@@ -4,9 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI News Aggregator</title>
+    <style>
+        /* Simple, clean UI styling */
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        h1 { text-align: center; color: #333; }
+        
+        /* The look of the News Article Card */
+        .article-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .title { font-size: 1.5em; margin: 0 0 10px 0; color: #111; }
+        .summary { color: #555; line-height: 1.5; }
+        
+        /* Agree/Disagree Buttons and Liability Indicator */
+        .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; }
+        button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-agree { background-color: #28a745; color: white; }
+        .btn-agree:hover { background-color: #218838; }
+        .btn-disagree { background-color: #dc3545; color: white; }
+        .btn-disagree:hover { background-color: #c82333; }
+        .indicator { margin-left: auto; font-weight: bold; color: #007bff; background: #e9ecef; padding: 5px 10px; border-radius: 5px;}
+    </style>
 </head>
 <body>
-    <h1>AI News Aggregator is Live!</h1>
-    <p>This is where our news feed and agree/disagree buttons will go.</p>
+    <div class="container">
+        <h1>Global AI News Feed</h1>
+        
+        <div id="news-feed-container">
+            <p style="text-align: center;">Connecting to database...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        // 1. Import Firebase from Google's CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // 2. Your exact Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAf24QJBLGnLFOaYAOzWiaUZ2NwN9QX_kY",
+          authDomain: "ai-news-aggregator-7d594.firebaseapp.com",
+          projectId: "ai-news-aggregator-7d594",
+          storageBucket: "ai-news-aggregator-7d594.firebasestorage.app",
+          messagingSenderId: "1032109819154",
+          appId: "1:1032109819154:web:0aeca97beb10cf6c789fcb",
+          measurementId: "G-J31KBCJPZM"
+        };
+
+        // 3. Initialize Firebase and Firestore Database
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Update the screen so we know it worked!
+        document.getElementById('news-feed-container').innerHTML = "<p style='text-align: center;'>Database connected! Waiting for articles...</p>";
+        
+        // Note: The code to fetch and display the articles will go right here next!
+    </script>
 </body>
 </html>
