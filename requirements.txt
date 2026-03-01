@@ -1,0 +1,4 @@
+feedparser
+google-genai
+firebase-admin
+newspaper3k
