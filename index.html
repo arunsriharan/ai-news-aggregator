@@ -30,16 +30,15 @@
         <h1>Global AI News Feed</h1>
         
         <div id="news-feed-container">
-            <p style="text-align: center;">Connecting to database...</p>
+            <p style="text-align: center;">Loading articles from database...</p>
         </div>
     </div>
 
     <script type="module">
-        // 1. Import Firebase from Google's CDN
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 2. Your exact Firebase Configuration
+        // Your exact Firebase Configuration
         const firebaseConfig = {
           apiKey: "AIzaSyAf24QJBLGnLFOaYAOzWiaUZ2NwN9QX_kY",
           authDomain: "ai-news-aggregator-7d594.firebaseapp.com",
@@ -50,14 +49,51 @@
           measurementId: "G-J31KBCJPZM"
         };
 
-        // 3. Initialize Firebase and Firestore Database
+        // Initialize Firebase and Firestore Database
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Update the screen so we know it worked!
-        document.getElementById('news-feed-container').innerHTML = "<p style='text-align: center;'>Database connected! Waiting for articles...</p>";
-        
-        // Note: The code to fetch and display the articles will go right here next!
+        // Function to fetch and display articles
+        async function loadArticles() {
+            const feedContainer = document.getElementById('news-feed-container');
+            
+            try {
+                // Go to the "articles" collection in our database and get everything
+                const querySnapshot = await getDocs(collection(db, "articles"));
+                
+                feedContainer.innerHTML = ''; // Clear the loading text
+
+                if (querySnapshot.empty) {
+                    feedContainer.innerHTML = '<p style="text-align: center;">No articles found yet.</p>';
+                    return;
+                }
+
+                // Loop through every article we find and build the HTML card for it
+                querySnapshot.forEach((doc) => {
+                    const article = doc.data();
+                    
+                    const articleHTML = `
+                        <div class="article-card">
+                            <h2 class="title">${article.title}</h2>
+                            <p class="summary">${article.summary}</p>
+                            <div class="actions">
+                                <button class="btn-agree">👍 Agree (${article.agree_votes})</button>
+                                <button class="btn-disagree">👎 Disagree (${article.disagree_votes})</button>
+                                <div class="indicator">Liability: ${article.liability_score}%</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    feedContainer.innerHTML += articleHTML;
+                });
+            } catch (error) {
+                console.error("Error fetching articles: ", error);
+                feedContainer.innerHTML = "<p style='text-align: center; color: red;'>Error loading articles.</p>";
+            }
+        }
+
+        // Run the function as soon as the page loads
+        loadArticles();
     </script>
 </body>
 </html>
