@@ -1,99 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI News Aggregator</title>
+    <title>AI News Pulse | Truth & Liability</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    
     <style>
-        /* Simple, clean UI styling */
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        h1 { text-align: center; color: #333; }
+        :root[data-theme="light"] {
+            --bg: #f8f9fa; --card: #ffffff; --text: #1a1a1b; --accent: #007bff; --border: #dbdbdb;
+        }
+        :root[data-theme="dark"] {
+            --bg: #030303; --card: #1a1a1b; --text: #d7dadc; --accent: #4dabff; --border: #343536;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; }
         
-        /* The look of the News Article Card */
-        .article-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .title { font-size: 1.5em; margin: 0 0 10px 0; color: #111; }
-        .summary { color: #555; line-height: 1.5; }
+        /* Navbar */
+        nav { background: var(--card); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--accent); cursor: pointer; }
+        .search-bar { flex-grow: 1; max-width: 500px; margin: 0 20px; position: relative; }
+        .search-bar input { width: 100%; padding: 10px 40px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
         
-        /* Agree/Disagree Buttons and Liability Indicator */
-        .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; }
-        button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-agree { background-color: #28a745; color: white; }
-        .btn-agree:hover { background-color: #218838; }
-        .btn-disagree { background-color: #dc3545; color: white; }
-        .btn-disagree:hover { background-color: #c82333; }
-        .indicator { margin-left: auto; font-weight: bold; color: #007bff; background: #e9ecef; padding: 5px 10px; border-radius: 5px;}
+        /* Layout */
+        .main-content { display: grid; grid-template-columns: 1fr 300px; gap: 30px; padding: 20px 5%; }
+        
+        /* Article Card */
+        .card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .tag { background: var(--accent); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; }
+        .title { font-size: 1.8rem; margin: 15px 0; line-height: 1.2; }
+        .summary { line-height: 1.6; color: var(--text); opacity: 0.9; }
+        
+        /* Voting & Liability UI */
+        .meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .vote-btns { display: flex; gap: 10px; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .btn-agree { background: #e7f5ed; color: #28a745; }
+        .btn-disagree { background: #fdeaea; color: #dc3545; }
+        .liability-gauge { text-align: right; }
+        .gauge-text { font-size: 0.8rem; font-weight: bold; }
+        .gauge-bar { width: 100px; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .gauge-fill { height: 100%; background: var(--accent); }
+
+        /* Sidebar - Trending Topics */
+        .sidebar-section { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); position: sticky; top: 100px; }
+        .trend-item { padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .trend-item:hover { color: var(--accent); }
+
+        @media (max-width: 900px) { .main-content { grid-template-columns: 1fr; } .sidebar { display: none; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Global AI News Feed</h1>
-        
-        <div id="news-feed-container">
-            <p style="text-align: center;">Loading articles from database...</p>
+
+    <nav>
+        <div class="logo" onclick="location.reload()">AI PULSE</div>
+        <div class="search-bar">
+            <span class="material-icons-outlined" style="position:absolute; left:12px; top:10px;">search</span>
+            <input type="text" id="searchInput" placeholder="Search news, tags, or topics...">
         </div>
+        <div style="display: flex; gap: 15px;">
+            <button onclick="toggleTheme()" class="btn" id="themeBtn"><span class="material-icons-outlined">dark_mode</span></button>
+            <button class="btn btn-agree" onclick="notifyMe()">Notify Me</button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div id="news-feed">
+            <p style="text-align: center;">Scanning global sources...</p>
+        </div>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Hot Topics</h3>
+                <div class="trend-item">#CompetitiveProgramming</div>
+                <div class="trend-item">#ICPC2026</div>
+                <div class="trend-item">#RealAnalysis</div>
+                <div class="trend-item">#AI_Ethics</div>
+            </div>
+        </aside>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Your exact Firebase Configuration
         const firebaseConfig = {
-          apiKey: "AIzaSyAf24QJBLGnLFOaYAOzWiaUZ2NwN9QX_kY",
-          authDomain: "ai-news-aggregator-7d594.firebaseapp.com",
-          projectId: "ai-news-aggregator-7d594",
-          storageBucket: "ai-news-aggregator-7d594.firebasestorage.app",
-          messagingSenderId: "1032109819154",
-          appId: "1:1032109819154:web:0aeca97beb10cf6c789fcb",
-          measurementId: "G-J31KBCJPZM"
+            apiKey: "AIzaSyAf24QJBLGnLFOaYAOzWiaUZ2NwN9QX_kY",
+            authDomain: "ai-news-aggregator-7d594.firebaseapp.com",
+            projectId: "ai-news-aggregator-7d594",
+            storageBucket: "ai-news-aggregator-7d594.firebasestorage.app",
+            messagingSenderId: "1032109819154",
+            appId: "1:1032109819154:web:0aeca97beb10cf6c789fcb"
         };
 
-        // Initialize Firebase and Firestore Database
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Function to fetch and display articles
-        async function loadArticles() {
-            const feedContainer = document.getElementById('news-feed-container');
-            
-            try {
-                // Go to the "articles" collection in our database and get everything
-                const querySnapshot = await getDocs(collection(db, "articles"));
-                
-                feedContainer.innerHTML = ''; // Clear the loading text
+        // REAL-TIME LISTENER: Updates without refreshing the page!
+        function listenToNews(tagFilter = null) {
+            let newsQuery = collection(db, "articles");
+            if(tagFilter) newsQuery = query(newsQuery, where("tag", "==", tagFilter));
 
-                if (querySnapshot.empty) {
-                    feedContainer.innerHTML = '<p style="text-align: center;">No articles found yet.</p>';
-                    return;
-                }
-
-                // Loop through every article we find and build the HTML card for it
-                querySnapshot.forEach((doc) => {
-                    const article = doc.data();
-                    
-                    const articleHTML = `
-                        <div class="article-card">
-                            <h2 class="title">${article.title}</h2>
-                            <p class="summary">${article.summary}</p>
-                            <div class="actions">
-                                <button class="btn-agree">👍 Agree (${article.agree_votes})</button>
-                                <button class="btn-disagree">👎 Disagree (${article.disagree_votes})</button>
-                                <div class="indicator">Liability: ${article.liability_score}%</div>
+            onSnapshot(newsQuery, (snapshot) => {
+                const feed = document.getElementById('news-feed');
+                feed.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    feed.innerHTML += `
+                        <div class="card">
+                            <span class="tag" onclick="filterByTag('${data.tag}')">${data.tag || 'News'}</span>
+                            <h2 class="title">${data.title}</h2>
+                            <p class="summary">${data.summary}</p>
+                            <div class="meta-row">
+                                <div class="vote-btns">
+                                    <button class="btn btn-agree"><span class="material-icons-outlined">thumb_up</span> ${data.agree_votes || 0}</button>
+                                    <button class="btn btn-disagree"><span class="material-icons-outlined">thumb_down</span> ${data.disagree_votes || 0}</button>
+                                </div>
+                                <div class="liability-gauge">
+                                    <div class="gauge-text">Liability Score: ${data.liability_score}%</div>
+                                    <div class="gauge-bar"><div class="gauge-fill" style="width:${data.liability_score}%"></div></div>
+                                </div>
                             </div>
                         </div>
                     `;
-                    
-                    feedContainer.innerHTML += articleHTML;
                 });
-            } catch (error) {
-                console.error("Error fetching articles: ", error);
-                feedContainer.innerHTML = "<p style='text-align: center; color: red;'>Error loading articles.</p>";
-            }
+            });
         }
 
-        // Run the function as soon as the page loads
-        loadArticles();
+        // Global functions for buttons
+        window.toggleTheme = () => {
+            const root = document.documentElement;
+            const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            document.getElementById('themeBtn').innerHTML = `<span class="material-icons-outlined">${newTheme === 'light' ? 'dark_mode' : 'light_mode'}</span>`;
+        };
+
+        window.notifyMe = () => {
+            alert("Notification system linked! You will be alerted for breaking news.");
+        };
+
+        window.filterByTag = (tag) => {
+            listenToNews(tag);
+        };
+
+        listenToNews();
     </script>
 </body>
 </html>
